@@ -19,6 +19,7 @@ public static class InputHelper
             if (values.Length != 2)
             {
                 Console.WriteLine($"Write 2 values seperated by space, instead of {values.Length}.");
+                continue;
             }
             
             if (int.TryParse(values[0], out var row) && int.TryParse(values[1], out var column) && row is >= 0 and <= 2 && column is <= 2 and >= 0)
