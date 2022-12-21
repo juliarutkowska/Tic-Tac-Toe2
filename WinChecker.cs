@@ -2,7 +2,7 @@ namespace Tic_Tac_Toe2;
 
 public static class WinChecker
 {
-    public static bool CheckWinner(string[,] board, string symbol)
+    public static GameState CheckWinner(Symbol[,] board, Symbol symbol)
     {
         // Check if there are 3 symbols in any row
         for (var row = 0; row < 3; row++)
@@ -19,7 +19,9 @@ public static class WinChecker
 
             if (symbolOccurrencesInARow == 3)
             {
-                return true;
+                return symbol is Symbol.X 
+                    ? GameState.XWin 
+                    : GameState.OWin;
             }
         }
         
@@ -38,7 +40,9 @@ public static class WinChecker
 
             if (symbolOccurrencesInAColumn == 3)
             {
-                return true;
+                return symbol is Symbol.X 
+                    ? GameState.XWin 
+                    : GameState.OWin;
             }
         }
         
@@ -47,7 +51,9 @@ public static class WinChecker
            && board[1, 1] == symbol
            && board[2, 2] == symbol)
         {
-            return true;
+            return symbol is Symbol.X 
+                ? GameState.XWin 
+                : GameState.OWin;
         }
         
         // Check second diagonal
@@ -55,9 +61,25 @@ public static class WinChecker
             && board[1, 1] == symbol
             && board[0, 0] == symbol)
         {
-            return true;
+            return symbol is Symbol.X 
+                ? GameState.XWin 
+                : GameState.OWin;
         }
 
-        return false;
+        var emptyFields = 0;
+        for (var row = 0; row < 3; row++)
+        {
+            for (var column = 0; column < 3; column++)
+            {
+                if (board[row, column] is Symbol.None)
+                {
+                    emptyFields++;
+                }
+            }
+        }
+
+        return emptyFields == 0 
+            ? GameState.Draw 
+            : GameState.Open;
     }
 }

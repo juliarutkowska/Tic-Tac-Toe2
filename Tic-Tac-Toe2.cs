@@ -2,44 +2,42 @@
 
 var board = BoardInitializer.InitializeToBoard();
 
-var symbol = "o";
-var turns = 0;
+var symbol = Symbol.O;
+var gameMode = GameChooser.ChooseAGame();
+
 while (true)
 {
-    var move = InputHelper.GetUsersMove(symbol);
-    Console.WriteLine($"You put your {symbol} here: {move.Row} {move.Column}.");
-
-    if (board[move.Row, move.Column].Equals("o") || board[move.Row, move.Column].Equals("x"))
+    if (gameMode is GameMode.SinglePlayer)
     {
-        Console.WriteLine("This spot is taken. Please chose another one.");
-        continue;
+        Console.WriteLine("Now it's computers move.");
+        Computer.Move(board, symbol);
+
+        symbol = symbol is Symbol.O
+            ? Symbol.X
+            : Symbol.O;
+
+        switch (WinChecker.CheckWinner(board, symbol))
+        {
+            case GameState.XWin:
+                Console.WriteLine($"You won \"{symbol}\". Congrats!");
+                break;  
+        }
+        
+        Console.WriteLine("Now it's players move.");
     }
     
-    board[move.Row, move.Column] = symbol;
-    BoardPrinter.PrintBoard(board);
-    turns++;
+    Player.PlayersMove(board, symbol);
 
-    if (WinChecker.CheckWinner(board, symbol))
+    switch (WinChecker.CheckWinner(board, symbol))
     {
-        Console.WriteLine($"You won \"{symbol}\". Congrats!");
-        return;
+        case GameState.XWin:
+            Console.WriteLine($"You won \"{symbol}\". Congrats!");
+            break;  
     }
     
     // Change for a good symbol
-    if (symbol == "o")
-    {
-        symbol = "x";
-    }
-    else
-    {
-        symbol = "o";
-    }
-    
-    
-    if (turns == 9)
-    {
-        Console.WriteLine("It's a draw!");
-        break;
-    }
+    symbol = symbol is Symbol.O
+        ? Symbol.X
+        : Symbol.O;    
 }
 

@@ -2,7 +2,7 @@ namespace Tic_Tac_Toe2;
 
 public static class InputHelper
 {
-    public static Position GetUsersMove(string symbol)
+    public static Position GetUsersMove(Symbol symbol)
     {
         while (true)
         {
